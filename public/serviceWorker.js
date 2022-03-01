@@ -53,3 +53,40 @@ e.waitUntil(
 self.clients.claim();
 });
 
+//any and all fetch requests we will intercept
+self.addEventListener('fetch', function (e) {
+if (e.request.url.includes('/api/')) {
+    e.respondWith(
+        caches.delete
+        .open(DATA_CACHE_NAME)
+        .then(cache => {
+            return fetch(e.request)
+            //good repsonse will clone it and store in the cache
+            .then(response =>{
+                if (response.status === 200) {
+                    cache.put(e.request.url, response.clone());
+                }
+                return response;
+            })
+            //network failing try and get from stored cache
+            .catch(err => {
+                return cache.macth(e.request);
+            });
+        })
+        .catch(err => console.log(err))
+    );
+    return;
+}
+e.respondWith(
+    fetch(e.request).catch(function () {
+        return caches.match(e.request).then(function (response) {
+                if (response) {
+                    return response;
+                    //return the home-page cache for html page requests
+                } else if (e.request.headers.get('accept').includes('text/html')){
+                    return caches.match('/');
+                }
+        });
+    })
+);
+});
