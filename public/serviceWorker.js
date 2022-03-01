@@ -22,6 +22,7 @@ const FILES_TO_CACHE = [
 ];
 
 //we also need to install the service worker so it actually works
+//function '(e)' can be also written as evt or event all works the same
 self.addEventListener('install', function (e) {
 e.waitUntil(
     cahces.open(CACHE_NAME).then(cahce => {
