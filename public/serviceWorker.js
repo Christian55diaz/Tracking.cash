@@ -34,3 +34,22 @@ e.waitUntil(
 self.skipWaiting();
 });
 
+//we succefully install the service worker but now we must activate it
+self.addEventListener('activate', function(e) {
+e.waitUntil(
+    cache.keys().then(keyList => {
+        return Promise.all(
+            keyList.map(key => {
+                // !== doesn't do type conversion 
+                //here we are removing the old cahce that is not useful
+                if (key !== CACHE_NAME && key !== DATA_CACHE_NAME)  {
+                    console.log('Old chache has been deleted');
+                    return caches.delete(key);
+                }
+            })
+        );
+    })
+);
+self.clients.claim();
+});
+
