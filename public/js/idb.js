@@ -27,3 +27,38 @@ request.onsuccess = function (event) {
 request.onerror = function (event) {
     console.log(event.target.errorCode);
 };
+
+// function will still work if a transaction submission is attempted w/ no connection
+function saveRecord(record) {
+    //transaction will first be pending then write to the db to then store it(or record the info)
+    const transaction = db.transaction(['pending'], 'readwrite');
+    const store = transaction.createObjectStore('pending');
+    store.add(record);
+}
+
+//when the db is online this function will work
+function checkDatabase() {
+    //this starts a transaction to the db
+    const transaction = db.transaction(['pending'], 'readwrite');
+    //access your object-store
+    const store = transaction.createObjectStore('pending');
+    const getALL = store.getALL();
+//getall function for our api route Post so that we can get all if the length is greater than 0
+    getALL.onsuccess = function () {
+        if (getALL.result.length > 0) {
+            fetch('/api/transaction/bulk', {
+                method: 'Post',
+                body: JSON.stringify(getALL.result),
+                headers: {
+                    //*/* = http accept header json
+                    Accept: 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(() => {
+                
+            }
+        }
+    }
+}
