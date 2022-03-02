@@ -57,8 +57,20 @@ function checkDatabase() {
             })
             .then(response => response.json())
             .then(() => {
-                
-            }
+                //opening another transaction
+                const transaction = db.transaction(['pending'], 'readwrite');
+                //before we accessed the object store but now we access our pending store
+                const store = transaction.objectStore('pending');
+                //at some point we need to clear the store
+                store.clear();
+            })
+            //catching errors and if we do console log "err"
+            .catch(err => {
+                console.log(err);
+            });
         }
-    }
+    };
 }
+
+//make sure to listen when the app comes backs online
+window.addEventListener('online', checkDatabase);
