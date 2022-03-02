@@ -14,3 +14,16 @@ request.unupgradedneeded = function (event) {
     });
 };
 
+request.onsuccess = function (event) {
+    db = event.target.result;
+    //checking database status
+    if (navigator.online) {
+        //if navigator online we tell the db to check it
+        checkDatabase();
+    }
+};
+
+//error code
+request.onerror = function (event) {
+    console.log(event.target.errorCode);
+};
