@@ -27,7 +27,7 @@ GitHub: [christian55diaz](https://github.com/christian55diaz)
 
 Deployment: https://trackingcash.herokuapp.com/
 
-Video: https://youtu.be/GrUTPGyi2po
+Video: https://youtu.be/tZ2kR2btTz0
   
 ## Usage
 The use of this project is so that you can track your cash(expenses). Wanna go on that trip of your lifetime well monitor your spending here!
